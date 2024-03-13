@@ -2,7 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 
 
+# TODO define global variable (?) to scrape only information we are interested in
 def scrape_stock_info(stock_code):
+    result = []
     url = f'https://finance.yahoo.com/quote/{stock_code}/key-statistics'
     headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0'}
     response = requests.get(url, headers=headers)
@@ -15,9 +17,19 @@ def scrape_stock_info(stock_code):
                     sup.extract()
                 tds = [td.get_text(strip=True) for td in tr.select("td")]
                 if len(tds) == 2:
-                    print("{:<50} {}".format(*tds))
-    else:
-        print('dx')
+                    result.append((tds[0], tds[1]))
+    return result
 
 
-scrape_stock_info('5109.KL')
+def log_stock_info(stock_info_input):
+    for info in stock_info_input:
+        print("{:<50} {}".format(*info))
+
+
+# TODO define a way to dynamically ask for input source (e.g. notepad)
+stock_codes = ['5109.KL', '1295.KL']
+for code in stock_codes:
+    print(code)
+    stock_info = scrape_stock_info(code)
+    log_stock_info(stock_info)
+    print('\n')
