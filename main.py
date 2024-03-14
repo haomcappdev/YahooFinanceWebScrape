@@ -26,8 +26,11 @@ def log_stock_info(stock_info_input):
         print("{:<50} {}".format(*info))
 
 
-# TODO define a way to dynamically ask for input source (e.g. notepad)
-stock_codes = ['5109.KL', '1295.KL']
+stock_codes = []
+f = open("/Users/chaiminghao/Documents/Minghao Learning/Test files/Python/YahooFinanceWebScrape/stock codes.txt", "r")
+for line in f:
+    stock_codes.append(line)
+f.close()
 for code in stock_codes:
     print(code)
     stock_info = scrape_stock_info(code)
