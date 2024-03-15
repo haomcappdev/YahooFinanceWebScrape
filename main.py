@@ -27,7 +27,8 @@ def log_stock_info(stock_info_input):
 
 
 stock_codes = []
-f = open("/Users/chaiminghao/Documents/Minghao Learning/Test files/Python/YahooFinanceWebScrape/stock codes.txt", "r")
+#f = open("/Users/chaiminghao/Documents/Minghao Learning/Test files/Python/YahooFinanceWebScrape/stock codes.txt", "r")
+f = open('C:\\Users\\Hao\\Documents\\Learning\\Python\\YahooFinanceWebScrape\\stock codes.txt', "r")
 for line in f:
     stock_codes.append(line)
 f.close()
