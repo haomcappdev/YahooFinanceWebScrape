@@ -1,3 +1,4 @@
+from decimal import Decimal
 from bs4 import BeautifulSoup
 import requests
 
@@ -20,7 +21,17 @@ def scrape_stock_info(stock_code, info):
                     cleaned_column_title = tds[0].strip()
                     if cleaned_column_title in info:
                         result.append((cleaned_column_title, tds[1]))
+                        if cleaned_column_title == "Diluted EPS (ttm)":
+                            pe_ratio = get_price_to_earnings_ratio(stock_price, tds[1])
+                            result.append(("Price to Earnings Ratio", pe_ratio))
     return result
+
+
+def get_price_to_earnings_ratio(stock_price, earnings_per_share):
+    if not stock_price and not earnings_per_share:
+        return Decimal(stock_price) / Decimal(earnings_per_share)
+    else:
+        return ""
 
 
 def log_stock_info(stock_info_input):
