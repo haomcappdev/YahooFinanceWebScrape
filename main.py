@@ -9,6 +9,8 @@ def scrape_stock_info(stock_code, info):
     if response.status_code == 200:
         content = response.text
         soup = BeautifulSoup(content, 'html.parser')
+        stock_price = soup.select_one(f'fin-streamer[data-field="regularMarketPrice"][data-symbol="{stock_code}"]')
+        result.append(("Stock Price", stock_price.findAll("span")[0].string))
         for t in soup.select("table"):
             for tr in t.select("tr:has(td)"):
                 for sup in tr.select("sup"):
