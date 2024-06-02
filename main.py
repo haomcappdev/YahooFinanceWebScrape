@@ -1,5 +1,6 @@
 from decimal import Decimal
 from bs4 import BeautifulSoup
+import os
 import requests
 
 def scrape_stock_info(stock_code, info):
@@ -34,13 +35,21 @@ def get_price_to_earnings_ratio(stock_price, earnings_per_share):
         return ""
 
 
-def log_stock_info(stock_info_input):
-    for info in stock_info_input:
-        print("{:<50} {}".format(*info))
+def write_stock_info_to_file(output_file_path, stock_code, stock_info_input):
+    try:
+        with open(output_file_path, "a") as file:
+            file.write(stock_code)
+            file.write('\n')
+            for info in stock_info_input:
+                file.write("{:<50} {}".format(*info))
+                file.write('\n')
+    except Exception as e:
+        print("An error occurred:", str(e))
 
 
 stock_codes = []
 interested_info = []
+output_file_path = "output.txt"
 f = open("stock codes.txt", "r")
 # f = open('C:\\Users\\Hao\\Documents\\Learning\\Python\\YahooFinanceWebScrape\\stock codes.txt', "r")
 for line in f:
@@ -50,8 +59,9 @@ f = open("stock information", "r")
 for line in f:
     interested_info.append(line.strip())
 f.close()
+if os.path.exists(output_file_path):
+    os.remove(output_file_path)
 for code in stock_codes:
-    print(code)
     stock_info = scrape_stock_info(code, interested_info)
-    log_stock_info(stock_info)
+    write_stock_info_to_file(output_file_path, code, stock_info)
     print('\n')
