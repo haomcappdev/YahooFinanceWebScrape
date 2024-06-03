@@ -2,6 +2,23 @@ from decimal import Decimal
 from bs4 import BeautifulSoup
 import os
 import requests
+import yagmail
+import configparser
+
+
+def send_to_email():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    subject = "Stock Information"
+    contents = ["", "output.txt"]
+
+    yag = yagmail.SMTP(config['DEFAULT']['EmailAddress'],
+                       config['DEFAULT']['EmailPassword'])
+    yag.send(config['DEFAULT']['EmailAddress'],
+             subject,
+             contents)
+
 
 def scrape_stock_info(stock_code, info):
     result = []
@@ -40,9 +57,11 @@ def write_stock_info_to_file(output_file_path, stock_code, stock_info_input):
         with open(output_file_path, "a") as file:
             file.write(stock_code)
             file.write('\n')
+            file.write('\n')
             for info in stock_info_input:
                 file.write("{:<50} {}".format(*info))
                 file.write('\n')
+            file.write('\n')
     except Exception as e:
         print("An error occurred:", str(e))
 
@@ -64,4 +83,4 @@ if os.path.exists(output_file_path):
 for code in stock_codes:
     stock_info = scrape_stock_info(code, interested_info)
     write_stock_info_to_file(output_file_path, code, stock_info)
-    print('\n')
+send_to_email()
