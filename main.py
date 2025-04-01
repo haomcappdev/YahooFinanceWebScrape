@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def scrape_stock_info(stock_code):
+def scrape_stock_info2(stock_code):
     result = []
     load_stock_name(stock_code)
     load_and_extract_from_key_statistics(result, stock_code)
