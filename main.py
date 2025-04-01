@@ -167,13 +167,11 @@ def format_numeric_notation(text):
     return formattedText
 
 
-stock_codes = ["5109.KL", "1155.KL"]
-
-# f = open("stock codes.txt", "r")
-# f = open('C:\\Users\\Hao\\Documents\\Learning\\Python\\YahooFinanceWebScrape\\stock codes.txt', "r")
-# for line in f:
-#    stock_codes.append(line)
-# f.close()
+stock_codes = []
+f = open("stock codes.txt", "r")
+for line in f:
+    stock_codes.append(line)
+f.close()
 for code in stock_codes:
     stock_info = scrape_stock_info(code.strip())
     log_stock_info(stock_info)
