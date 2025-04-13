@@ -137,18 +137,38 @@ def extract_nav(soup, result):
 
 
 def extract_eps(soup, result):
+    epsAvailableYears = 3
     epsTag = soup.find(string="Basic EPS")
     epsRow = epsTag.parent.parent.parent
     oddColumns = epsRow.select('div[class="column yf-t22klz alt"]')
     evenColumns = epsRow.select('div[class="column yf-t22klz"]')
-    eps1YearAgo = float(evenColumns[0].text)
-    eps2YearsAgo = float(oddColumns[1].text)
-    eps3YearsAgo = float(evenColumns[1].text)
-    averageEPS = round((eps1YearAgo + eps2YearsAgo + eps3YearsAgo) / 3, 2)
-    maxPriceByEPS = round(((eps1YearAgo + eps2YearsAgo + eps3YearsAgo) / 3) * 15, 2)
-    result.append(("Average EPS (3 years)", averageEPS))
-    result.append(("Average EPS (3 years) x15 (current stock price should not exceed this value)", maxPriceByEPS))
+    # EPS may be  a "--" string value
+    if (evenColumns[0].text.strip() != "--"):
+        eps1YearAgo = float(evenColumns[0].text)
+    else:
+        eps1YearAgo = 0
+        epsAvailableYears = epsAvailableYears - 1
 
+    if (oddColumns[1].text.strip() != "--"):
+        eps2YearsAgo = float(oddColumns[1].text)
+    else:
+        eps2YearsAgo = 0
+        epsAvailableYears = epsAvailableYears - 1
+
+    if (evenColumns[1].text.strip() != "--"):
+        eps3YearsAgo = float(evenColumns[1].text)
+    else:
+        eps3YearsAgo = 0
+        epsAvailableYears = epsAvailableYears - 1
+
+    if (epsAvailableYears != 0):
+        # fix division here
+        averageEPS = round((eps1YearAgo + eps2YearsAgo + eps3YearsAgo) / epsAvailableYears, 2)
+        maxPriceByEPS = round(((eps1YearAgo + eps2YearsAgo + eps3YearsAgo) / epsAvailableYears) * 15, 2)
+        result.append((f"Average EPS ({epsAvailableYears} years)", averageEPS))
+        result.append((f"Average EPS ({epsAvailableYears} years) x15 (current stock price should not exceed this value)", maxPriceByEPS))
+    else:
+        result.append(("Average EPS is not available", "--"))
 
 def log_stock_info(stock_info_input):
     for info in stock_info_input:
