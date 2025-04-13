@@ -1,6 +1,9 @@
+from pathlib import Path
+from datetime import datetime
 from bs4 import BeautifulSoup
-import requests
 
+import requests
+import sys
 
 def scrape_stock_info(stock_code):
     result = []
@@ -168,11 +171,26 @@ def format_numeric_notation(text):
 
 
 stock_codes = []
-f = open("stock codes.txt", "r")
-for line in f:
+stockCodesFile = open("stock codes.txt", "r")
+for line in stockCodesFile:
     stock_codes.append(line)
-f.close()
-for code in stock_codes:
-    stock_info = scrape_stock_info(code.strip())
-    log_stock_info(stock_info)
-    print('\n')
+stockCodesFile.close()
+
+folder = Path("Output")
+folder.mkdir(parents=True, exist_ok=True)
+
+now = datetime.now()
+filename = now.strftime("%Y-%m-%d_%H-%M-%S") + ".txt"
+file_path = folder / filename
+
+original_stdout = sys.stdout
+with file_path.open("w") as f:
+    sys.stdout = f
+    for code in stock_codes:
+        stock_info = scrape_stock_info(code.strip())
+        log_stock_info(stock_info)
+        print('\n')
+
+# Restore original stdout
+sys.stdout = original_stdout
+print("Completed script.")
