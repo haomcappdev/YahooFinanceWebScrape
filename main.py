@@ -15,8 +15,8 @@ def scrape_stock_info(stock_code):
 
 
 def load_stock_name(stock_code):
-    url = f'https://finance.yahoo.com/quote/{stock_code}'
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0'}
+    url = f'https://finance.yahoo.com/quote/{stock_code}/'
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         content = response.text
@@ -27,7 +27,7 @@ def load_stock_name(stock_code):
 
 def load_and_extract_from_key_statistics(result, stock_code):
     url = f'https://finance.yahoo.com/quote/{stock_code}/key-statistics'
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         content = response.text
@@ -41,7 +41,7 @@ def load_and_extract_from_key_statistics(result, stock_code):
 
 def load_and_extract_from_balance_sheet(result, stock_code):
     url = f'https://finance.yahoo.com/quote/{stock_code}/balance-sheet'
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         content = response.text
@@ -52,7 +52,7 @@ def load_and_extract_from_balance_sheet(result, stock_code):
 
 def load_and_extract_from_income_statement(result, stock_code):
     url = f'https://finance.yahoo.com/quote/{stock_code}/financials'
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         content = response.text
@@ -207,7 +207,7 @@ original_stdout = sys.stdout
 with file_path.open("w") as f:
     sys.stdout = f
     for code in stock_codes:
-        stock_info = scrape_stock_info(code.strip())
+        stock_info = scrape_stock_info(code.strip().replace("\n", ""))
         log_stock_info(stock_info)
         print('\n')
 
